@@ -8,8 +8,9 @@
 もし使用osがwindowsじゃないなら→②XPPtoPDF_Re2.pyを開き， delimiterとmyFontという変数を自身の環境に合わせて書き換える．
 
 ## 起動方法
-このフォルダをターミナル or コマンドプロンプトで開き"python3 supportXPP.py"
+このフォルダをターミナル or コマンドプロンプトで開き"python3 supportXPP.py"もしくは"python supportXPP.py"
 と入力して実行するだけです．
+ただし，いくつか外部ライブラリを使用しているので，お手数をおかけしますが，pipコマンドなどで自らダウンロードしてください．
 
 ## sample.dat
 試用のall info.datファイルです．x軸を[-1,1], y軸も[-1,1]にして出力してみてください．
