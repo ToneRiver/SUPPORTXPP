@@ -9,11 +9,13 @@ from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 
 ###############################################################
-#設定
-dat_files_location = '.\\' #普段XPPのdatファイルを保存しておくフォルダパスを記入してください．
-output_location = 'output' #このアプリからジャンプできるグラフ出力場所を記入してください．
+# 設定
+dat_files_location = '.\\'  # 普段XPPのdatファイルを保存しておくフォルダパスを記入してください．
+output_location = 'output'  # このアプリからジャンプできるグラフ出力場所を記入してください．
+python_code = 'python3'  # pythonのプログラムを実行するときの先頭部分
 
 ###############################################################
+
 
 class GuiWindow(QWidget):
 
@@ -30,16 +32,16 @@ class GuiWindow(QWidget):
         self.jump_datFiles_button = QPushButton('outputに飛ぶ', self)
         self.jump_datFiles_button.clicked.connect(lambda: self.jump_to_url(
             output_location))
-        self.launch_XPP_button = QPushButton('XPPを終了する', self)
-        self.launch_XPP_button.clicked.connect(self.quit_XPP)
-        self.launch_XPPuniv_button = QPushButton('XPPを起動する', self)
-        self.launch_XPPuniv_button.clicked.connect(self.launch_XPP)
+        # self.launch_XPP_button = QPushButton('XPPを終了する', self)
+        # self.launch_XPP_button.clicked.connect(self.quit_XPP)
+        # self.launch_XPPuniv_button = QPushButton('XPPを起動する', self)
+        # self.launch_XPPuniv_button.clicked.connect(self.launch_XPP)
         self.file_name = QLineEdit('', self)
         self.launch_XPPtoPDF2_button = QPushButton('右の名前でall info.datをPDF化する', self)
         self.launch_XPPtoPDF2_button.clicked.connect(self.launch_XPPtoPDF2)
         self.uis = [
-            [[self.quit_button,600,40]],
-            [[self.launch_XPP_button, 160, 40], [self.jump_datFiles_button, 160, 40], [self.launch_XPPuniv_button, 160, 40]],
+            [[self.quit_button, 600, 40]],
+            [[self.jump_datFiles_button, 160, 40]],
         ]
         self.dat_labels = [QLabel('', self), QLabel('', self), QLabel('', self), QLabel('', self)]
         self.dat_names = [[], [], [], []]
@@ -204,7 +206,8 @@ class GuiWindow(QWidget):
         for i, d in enumerate(self.dat_names):
             if i == len(self.dat_names)-1:  # 最後のセットは個別変換
                 for j, dd in enumerate(self.dat_names[i]):
-                    mycommand = "python3 "+program_pass+" "+os.path.basename(dd)[:-4]+" GROUP "+dd + draw_eigenValue + draw_solution + each_setting
+                    mycommand = python_code+" "+program_pass+" " + \
+                        os.path.basename(dd)[:-4]+" GROUP "+dd + draw_eigenValue + draw_solution + each_setting
                     # print("mycommand j\n",mycommand)
                     subprocess.Popen(mycommand, shell=True)
             else:  # 最後のセット以外は複数のdatを一つのpdfにする
@@ -214,7 +217,8 @@ class GuiWindow(QWidget):
                     dat_full_name += " " + str(dd)
         if self.file_name.text() != "":
             program_pass += " "
-        mycommand = "python3 "+program_pass+self.file_name.text()+dat_full_name + draw_eigenValue + draw_solution + each_setting
+        mycommand = python_code+" "+program_pass+self.file_name.text()+dat_full_name + draw_eigenValue + \
+            draw_solution + each_setting
         if dat_full_name != "":
             subprocess.Popen(mycommand, shell=True)
         # self.jump_to_url(
