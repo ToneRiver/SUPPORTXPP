@@ -11,5 +11,5 @@
 このフォルダをターミナル or コマンドプロンプトで開き"python3 supportXPP.py"
 と入力して実行するだけです．
 
-## ssample.dat
+## sample.dat
 試用のall info.datファイルです．x軸を[-1,1], y軸も[-1,1]にして出力してみてください．
