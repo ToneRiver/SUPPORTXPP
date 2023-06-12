@@ -11,13 +11,14 @@ import sys
 import os
 
 ################################
-# 設定
-
+# 初期設定
 out_path = "output" #出力フォルダ
 # delimiter = "/" #mac用フォルダ区切り文字
 delimiter = '\\' #windows用フォルダ区切り文字
 # myFont = "Hiragino Sans" #mac用フォント
 myFont = "MS Gothic"  # windows用フォント
+
+# 設定
 set_xlim = True
 set_ylim = True
 lang = "EN"  # EN=英語, JP=日本語

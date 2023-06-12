@@ -9,7 +9,7 @@ from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 
 ###############################################################
-# 設定
+# 初期設定
 dat_files_location = '.\\'  # 普段XPPのdatファイルを保存しておくフォルダパスを記入してください．
 output_location = 'output'  # このアプリからジャンプできるグラフ出力場所を記入してください．
 python_code = 'python3'  # pythonのプログラムを実行するときの先頭部分
