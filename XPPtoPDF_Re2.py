@@ -2,7 +2,7 @@
 '''プログラムの実行はpython3 XPPtoPDF_Re2.py ...でお願いします。'''
 '''datファイルの最後は\nであるとします'''
 from matplotlib import rcParams
-import pyperclip as pc
+# import pyperclip as pc
 import matplotlib.pyplot as plt
 import numpy as np
 import cmath
@@ -261,5 +261,5 @@ if draw_eigenValues is True:
     f.close()
 # plt.show()
 
-pc.copy(str(file_name)+".pdf")
+# pc.copy(str(file_name)+".pdf")
 print("XPPtoPDF.py完了")
