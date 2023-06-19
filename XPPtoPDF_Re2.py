@@ -44,7 +44,7 @@ def duplicate_rename(file_path):  # ファイル名がかぶっていなかっ�
         i = 1
         while True:
             # 数値を3桁などにしたい場合は({:0=3})とする
-            new_name = "{} ({}){}".format(name, i, ext)
+            new_name = "{}【{}】{}".format(name, i, ext)
             if not os.path.exists(new_name):
                 return new_name
             i += 1
