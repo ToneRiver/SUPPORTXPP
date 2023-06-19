@@ -1,20 +1,20 @@
 '''XPPで出力したall info.datファイル1つ以上をコマンドライン引数で指定してグラフとして重ねてXPP_outに出力するプログラムです．'''
 '''プログラムの実行はpython3 XPPtoPDF_Re2.py ...でお願いします。'''
 '''datファイルの最後は\nであるとします'''
-from matplotlib import rcParams
 # import pyperclip as pc
+
+################################
+# 初期設定
+from matplotlib import rcParams
 import matplotlib.pyplot as plt
 import numpy as np
 import cmath
 import math
 import sys
 import os
-
-################################
-# 初期設定
-out_path = "output" #出力フォルダ
+out_path = "output"  # 出力フォルダ
 # delimiter = "/" #mac用フォルダ区切り文字
-delimiter = '\\' #windows用フォルダ区切り文字
+delimiter = '\\'  # windows用フォルダ区切り文字
 # myFont = "Hiragino Sans" #mac用フォント
 myFont = "MS Gothic"  # windows用フォント
 
@@ -253,13 +253,21 @@ else:
 # グラフを pdf で保存する場合のおまじない
 rcParams['pdf.fonttype'] = 42
 
-fig.savefig(duplicate_rename(out_path + delimiter + str(file_name)+".pdf"))
+last_file_name = duplicate_rename(out_path + delimiter + str(file_name))
+fig.savefig(last_file_name+".pdf")
 
 if draw_eigenValues is True:
-    f = open(duplicate_rename(out_path + delimiter + str(file_name)+".txt"), 'w')  # パラメータがメモされたtxtファイルを生成
+    f = open(duplicate_rename(last_file_name+"_固有値.txt"), 'w')  # パラメータがメモされたtxtファイルを生成
     f.write(eigenValues_tex)
     f.close()
 # plt.show()
+
+for i in range(len(datas)):
+    txt_num = i #結合したdatファイルの通し番号
+    if len(datas) == 1:
+        txt_num = 0 #一つなら通し番号は非表示に
+    print(datas[i][0,0])
+    np.savetxt(duplicate_rename(last_file_name+".txt"),datas[i],fmt ='%.5f')
 
 # pc.copy(str(file_name)+".pdf")
 print("XPPtoPDF.py完了")

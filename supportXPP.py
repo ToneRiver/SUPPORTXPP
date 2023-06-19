@@ -97,7 +97,7 @@ class GuiWindow(QWidget):
         self.checkBoxUnStablePeri.setChecked(True)
         self.uis[-1].append([self.checkBoxUnStablePeri, 140, 40])
         self.checkBoxEigenValue = QCheckBox("固有値", self)
-        self.checkBoxEigenValue.setChecked(True)
+        # self.checkBoxEigenValue.setChecked(True)
         self.uis[-1].append([self.checkBoxEigenValue, 140, 40])
         self.uis.append([])
         self.variable_text = QLabel('変数', self)
@@ -221,8 +221,8 @@ class GuiWindow(QWidget):
             draw_solution + each_setting
         if dat_full_name != "":
             subprocess.Popen(mycommand, shell=True)
-        # self.jump_to_url(
-        #     "/Users/mebar/Library/CloudStorage/OneDrive-KyotoUniversity/Latex/syushi_minipaper/figures")
+        self.jump_to_url(
+            output_location)
 
     def set_dat_file(self, i):
         base_path = dat_files_location
