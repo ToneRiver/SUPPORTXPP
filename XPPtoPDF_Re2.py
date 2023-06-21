@@ -19,6 +19,10 @@ delimiter = '\\'  # windows用フォルダ区切り文字
 myFont = "MS Gothic"  # windows用フォント
 
 # 設定
+subplots_adjust_left=0.19
+subplots_adjust_right=0.95
+subplots_adjust_bottom=0.15
+subplots_adjust_top=0.93
 set_xlim = True
 set_ylim = True
 lang = "EN"  # EN=英語, JP=日本語
@@ -52,8 +56,8 @@ def duplicate_rename(file_path):  # ファイル名がかぶっていなかっ�
         return file_path
 
 
-def gen_graph(ax, data, colors, labels, n):
-    global eigenValues_tex, epoch, all_epoch, draw_eigenValues
+def gen_graph(ax, data, colors, labels, n,variable_num):
+    global eigenValues_tex, epoch, all_epoch, draw_allVariables
     stableE = []
     unstableE = []
     stableP = []
@@ -63,38 +67,38 @@ def gen_graph(ax, data, colors, labels, n):
     for d_i, d in enumerate(data):
         print(str(epoch) + " / " + str(all_epoch))
         epoch += 1
-        if draw_eigenValues is True and eigen_lim[0] <= float(d[3]) and float(d[3]) <= eigen_lim[1]:
-            eigenValues_tex += f'{xlabel} $ = {d[3]}$のとき，{solution_kinds[int(d[0])-1]}であり，variable$ = $ '
-            for i in range(n):
-                if i != 0:
-                    eigenValues_tex += ', '
-                if d[0] >= 3:
-                    eigenValues_tex += f'${d[6+n+i]} 〜 {d[6+i]}$'+' \\\\'
-                else:
-                    eigenValues_tex += f'${d[6+i]}$'+' \\\\'
-            eigenValues_tex += ' \\ \n'
-            if d_i != 0:
-                eigenValues_tex += '$(e^{\\lambda}) [(\\lambda)]='
-                for i in range(n):
-                    re = d[6+2*n+2*i+1-1]
-                    im = d[6+2*n+2*i+2-1]
-                    comp = re + im*1j  # exp(A)の虚数表示
-                    mag = abs(comp)  # 絶対値
-                    phase = cmath.phase(comp)  # 位相
-                    comp2 = math.log(mag) + phase * 1j  # Aの固有値
-                    if i != 0:
-                        eigenValues_tex += ', '
-                    if mag >= 1:
-                        eigenValues_tex += '\\bm{ '+str(comp)+' \\quad ['+str(comp2)+']}'+' \\\\'
-                    else:
-                        eigenValues_tex += f' {comp} \\quad [{comp2}]'+' \\\\'
-                    # if im > 0:
-                    #     eigenValues_tex += f'{re}+{im}i'
-                    # elif im < 0:
-                    #     eigenValues_tex += f'{re}{im}i'
-                    # else:
-                    #     eigenValues_tex += f'{re}'
-                eigenValues_tex += '$\\\\ \n\n'
+        # if draw_allVariables is True and eigen_lim[0] <= float(d[3]) and float(d[3]) <= eigen_lim[1]:
+        #     eigenValues_tex += f'{xlabel} $ = {d[3]}$のとき，{solution_kinds[int(d[0])-1]}であり，variable$ = $ '
+        #     for i in range(n):
+        #         if i != 0:
+        #             eigenValues_tex += ', '
+        #         if d[0] >= 3:
+        #             eigenValues_tex += f'${d[6+n+i]} 〜 {d[6+i]}$'+' \\\\'
+        #         else:
+        #             eigenValues_tex += f'${d[6+i]}$'+' \\\\'
+        #     eigenValues_tex += ' \\ \n'
+        #     if d_i != 0:
+        #         eigenValues_tex += '$(e^{\\lambda}) [(\\lambda)]='
+        #         for i in range(n):
+        #             re = d[6+2*n+2*i+1-1]
+        #             im = d[6+2*n+2*i+2-1]
+        #             comp = re + im*1j  # exp(A)の虚数表示
+        #             mag = abs(comp)  # 絶対値
+        #             phase = cmath.phase(comp)  # 位相
+        #             comp2 = math.log(mag) + phase * 1j  # Aの固有値
+        #             if i != 0:
+        #                 eigenValues_tex += ', '
+        #             if mag >= 1:
+        #                 eigenValues_tex += '\\bm{ '+str(comp)+' \\quad ['+str(comp2)+']}'+' \\\\'
+        #             else:
+        #                 eigenValues_tex += f' {comp} \\quad [{comp2}]'+' \\\\'
+        #             # if im > 0:
+        #             #     eigenValues_tex += f'{re}+{im}i'
+        #             # elif im < 0:
+        #             #     eigenValues_tex += f'{re}{im}i'
+        #             # else:
+        #             #     eigenValues_tex += f'{re}'
+        #         eigenValues_tex += '$\\\\ \n\n'
         if (int(d[0]) == 1 and draw_solutions[0] == "True"):
             stableE = np.append(stableE, [d[3], d[6+variable_num-1]])
             pass
@@ -141,12 +145,12 @@ def gen_graph(ax, data, colors, labels, n):
 file_name = ""
 files = []
 draw_solutions = []  # 安定/不安定 平衡点/周期解　どれを描画するか
-variable_num = 0  # どの変数を描画するか
-draw_eigenValues = False
+variable_num_fact = 0  # どの変数を描画するか
+draw_allVariables = False
 for i, a in enumerate(sys.argv):
     if i == len(sys.argv) - 14:
         if a == "True":
-            draw_eigenValues = True
+            draw_allVariables = True
         continue
     if i == len(sys.argv) - 13:
         eigen_lim[0] = float(a)
@@ -158,7 +162,7 @@ for i, a in enumerate(sys.argv):
         draw_solutions.append(a)
         continue
     if i == len(sys.argv) - 7:
-        variable_num = int(a)
+        variable_num_fact = int(a)
         continue
     if i == len(sys.argv) - 6:
         xlim[0] = float(a)
@@ -212,54 +216,75 @@ for i in range(len(files)):
     # print(cat_data)
     datas.append(cat_data)
 
-
-fig, ax = plt.subplots()
-ax.set_xlabel(xlabel, size=20)
-ax.set_ylabel(ylabel, size=20)
-if set_xlim:
-    ax.set_xlim(xlim[0], xlim[1])
-if set_ylim:
-    ax.set_ylim(ylim[0], ylim[1])
-
 n = int((len(datas[0][0])-6)/4)  # モデルの次元
-if draw_eigenValues is True:
-    eigenValues_tex = ''
-
-all_epoch = 0
-for i in range(len(datas)):
-    all_epoch = len(datas[i])
-    colors = [["black", "blue", "red", "green"], ["dimgrey", "royalblue", "orangered", "limegreen"]]
-    labels = [label, False]
-    if same_color:
-        gen_graph(ax, datas[i], colors[0], labels[min(i, len(labels)-1)], n)
-    else:
-        gen_graph(ax, datas[i], colors[min(i, len(colors)-1)], labels[min(i, len(labels)-1)], n)
-
-# 補助目盛を表示
-ax.minorticks_on()
-# 目盛り線の表示
-ax.grid(which="major", color="black", alpha=0.5)
-ax.grid(which="minor", color="gray", linestyle=":")
-ax.tick_params(axis='x', labelsize=20)
-ax.tick_params(axis='y', labelsize=20)
-fig.subplots_adjust(left=0.14, right=0.95, bottom=0.15, top=0.93)
-plt.rc("legend", fontsize=18)
-if lang == "JP":
-    plt.legend(prop={"family": myFont}, markerscale=5)
+if draw_allVariables is True:
+    variable_nums = range(0, n+1)
 else:
-    plt.legend(markerscale=5)
-# plt.title("$"+str(file_name[2:])+"$",fontsize=20)
+    variable_nums = [0]
 
-# グラフを pdf で保存する場合のおまじない
-rcParams['pdf.fonttype'] = 42
 
-last_file_name = duplicate_rename(out_path + delimiter + str(file_name))
-fig.savefig(last_file_name+".pdf")
+last_folder_name = duplicate_rename(out_path + delimiter + str(file_name))
+os.makedirs(last_folder_name, exist_ok=True)
+for variable_num in variable_nums:
+    fig, ax = plt.subplots()
+    if variable_num == 0:
+        ax.set_xlabel(xlabel, size=20)
+        ax.set_ylabel(ylabel, size=20)
+    else:
+        ax.set_xlabel("abscissa", size=20)
+        ax.set_ylabel("ordinate", size=20)
+    if set_xlim and variable_num == 0:
+        ax.set_xlim(xlim[0], xlim[1])
+    if set_ylim and variable_num == 0:
+        ax.set_ylim(ylim[0], ylim[1])
 
-if draw_eigenValues is True:
-    f = open(duplicate_rename(last_file_name+"_固有値.txt"), 'w')  # パラメータがメモされたtxtファイルを生成
-    f.write(eigenValues_tex)
-    f.close()
+    # if draw_allVariables is True:
+    #     eigenValues_tex = ''
+
+    all_epoch = 0
+    for i in range(len(datas)):
+        all_epoch = len(datas[i])
+        colors = [["black", "blue", "red", "green"], ["dimgrey", "royalblue", "orangered", "limegreen"]]
+        labels = [label, False]
+        if same_color:
+            if variable_num == 0:
+                gen_graph(ax, datas[i], colors[0], labels[min(i, len(labels)-1)], n,variable_num_fact)
+            else:
+                gen_graph(ax, datas[i], colors[0], labels[min(i, len(labels)-1)], n,variable_num)
+        else:
+            if variable_num == 0:
+                gen_graph(ax, datas[i], colors[min(i, len(colors)-1)], labels[min(i, len(labels)-1)], n,variable_num_fact)
+            else:
+                gen_graph(ax, datas[i], colors[min(i, len(colors)-1)], labels[min(i, len(labels)-1)], n,variable_num)
+
+    # 補助目盛を表示
+    ax.minorticks_on()
+    # 目盛り線の表示
+    ax.grid(which="major", color="black", alpha=0.5)
+    ax.grid(which="minor", color="gray", linestyle=":")
+    ax.tick_params(axis='x', labelsize=20)
+    ax.tick_params(axis='y', labelsize=20)
+    fig.subplots_adjust(left=subplots_adjust_left, right=subplots_adjust_right, bottom=subplots_adjust_bottom, top=subplots_adjust_top)
+    plt.rc("legend", fontsize=18)
+    if lang == "JP":
+        plt.legend(prop={"family": myFont}, markerscale=5)
+    else:
+        plt.legend(markerscale=5)
+    # plt.title("$"+str(file_name[2:])+"$",fontsize=20)
+
+    # グラフを pdf で保存する場合のおまじない
+    rcParams['pdf.fonttype'] = 42
+
+    if variable_num == 0:
+        last_file_name = "0_main"
+    else:
+        last_file_name = "variable"+str(variable_num)
+    fig.savefig(last_folder_name+delimiter+last_file_name+".pdf")
+
+# if draw_allVariables is True:
+#     f = open(duplicate_rename(last_file_name+"_固有値.txt"), 'w')  # パラメータがメモされたtxtファイルを生成
+#     f.write(eigenValues_tex)
+#     f.close()
 # plt.show()
 
 for i in range(len(datas)):
@@ -267,7 +292,7 @@ for i in range(len(datas)):
     if len(datas) == 1:
         txt_num = 0 #一つなら通し番号は非表示に
     print(datas[i][0,0])
-    np.savetxt(duplicate_rename(last_file_name+".txt"),datas[i],fmt ='%.5f')
+    np.savetxt(duplicate_rename(last_folder_name+delimiter+"data.txt"), datas[i], fmt='%.5f')
 
 # pc.copy(str(file_name)+".pdf")
 print("XPPtoPDF.py完了")

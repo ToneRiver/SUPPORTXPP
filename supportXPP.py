@@ -12,7 +12,7 @@ from PyQt6.QtGui import *
 # 初期設定
 dat_files_location = '.\\'  # 普段XPPのdatファイルを保存しておくフォルダパスを記入してください．
 output_location = 'output'  # このアプリからジャンプできるグラフ出力場所を記入してください．
-python_code = 'python3'  # pythonのプログラムを実行するときの先頭部分
+python_code = 'python'  # pythonのプログラムを実行するときの先頭部分
 
 ###############################################################
 
@@ -96,8 +96,8 @@ class GuiWindow(QWidget):
         self.checkBoxUnStablePeri = QCheckBox("不安定周期解", self)
         self.checkBoxUnStablePeri.setChecked(True)
         self.uis[-1].append([self.checkBoxUnStablePeri, 140, 40])
-        self.checkBoxEigenValue = QCheckBox("固有値", self)
-        # self.checkBoxEigenValue.setChecked(True)
+        self.checkBoxEigenValue = QCheckBox("全変数を出力", self)
+        self.checkBoxEigenValue.setChecked(True)
         self.uis[-1].append([self.checkBoxEigenValue, 140, 40])
         self.uis.append([])
         self.variable_text = QLabel('変数', self)
@@ -114,10 +114,10 @@ class GuiWindow(QWidget):
         self.uis[-1].append([self.x_label_label, 60, 40])
         self.y_label_label = QLabel('y_label', self)
         self.uis[-1].append([self.y_label_label, 60, 40])
-        self.eigen_start_label = QLabel('固有値(始)', self)
-        self.uis[-1].append([self.eigen_start_label, 60, 40])
-        self.eigen_end_label = QLabel('固有値(終)', self)
-        self.uis[-1].append([self.eigen_end_label, 60, 40])
+        # self.eigen_start_label = QLabel('固有値(始)', self)
+        # self.uis[-1].append([self.eigen_start_label, 60, 40])
+        # self.eigen_end_label = QLabel('固有値(終)', self)
+        # self.uis[-1].append([self.eigen_end_label, 60, 40])
         self.uis.append([])
         self.variable_num = QLineEdit('1', self)
         self.uis[-1].append([self.variable_num, 40, 40])
@@ -133,10 +133,10 @@ class GuiWindow(QWidget):
         self.uis[-1].append([self.x_label, 60, 40])
         self.y_label = QLineEdit('$X_{1}$', self)
         self.uis[-1].append([self.y_label, 60, 40])
-        self.eigen_start = QLineEdit('0', self)
-        self.uis[-1].append([self.eigen_start, 60, 40])
-        self.eigen_end = QLineEdit('10', self)
-        self.uis[-1].append([self.eigen_end, 60, 40])
+        # self.eigen_start = QLineEdit('0', self)
+        # self.uis[-1].append([self.eigen_start, 60, 40])
+        # self.eigen_end = QLineEdit('10', self)
+        # self.uis[-1].append([self.eigen_end, 60, 40])
 
     def set_ui(self):  # uiを配置します
         I = len(self.uis)
@@ -194,8 +194,8 @@ class GuiWindow(QWidget):
     def launch_XPPtoPDF2(self):
         program_pass = "XPPtoPDF_Re2.py"
         dat_full_name = ""
-        draw_eigenValue = " " + str(self.checkBoxEigenValue.isChecked()) + " " + self.eigen_start.text() + \
-            " " + self.eigen_end.text()  # 固有値の表を出力するか またその範囲
+        draw_eigenValue = " " + str(self.checkBoxEigenValue.isChecked()) + " " + "0" + \
+            " " + "10"  # 固有値の表を出力するか またその範囲
         draw_solution = " "  # どの解を描画するか True True False Trueだと安定周期解以外を描画する
         draw_solution += str(self.checkBoxStableEque.isChecked()) + " "
         draw_solution += str(self.checkBoxUnStableEque.isChecked()) + " "
