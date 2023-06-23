@@ -13,7 +13,9 @@ from PyQt6.QtGui import *
 dat_files_location = '.\\'  # 普段XPPのdatファイルを保存しておくフォルダパスを記入してください．
 output_location = 'output'  # このアプリからジャンプできるグラフ出力場所を記入してください．
 python_code = 'python'  # pythonのプログラムを実行するときの先頭部分
-
+# python_code = 'python3'  # pythonのプログラムを実行するときの先頭部分
+apo = "" #windows
+# apo = "'" #mac
 ###############################################################
 
 
@@ -202,7 +204,7 @@ class GuiWindow(QWidget):
         draw_solution += str(self.checkBoxStablePeri.isChecked()) + " "
         draw_solution += str(self.checkBoxUnStablePeri.isChecked()) + " "
         each_setting = self.variable_num.text() + " " + self.x_start.text() + " " + self.x_end.text() + " " + self.y_start.text() + \
-            " " + self.y_end.text() + " '" + self.x_label.text() + "' '" + self.y_label.text() + "'"
+            " " + self.y_end.text() + " "+apo+"" + self.x_label.text() + ""+apo+" "+apo+"" + self.y_label.text() + ""+apo+""
         for i, d in enumerate(self.dat_names):
             if i == len(self.dat_names)-1:  # 最後のセットは個別変換
                 for j, dd in enumerate(self.dat_names[i]):
