@@ -216,8 +216,7 @@ for i in range(len(files)):
     for j, f in enumerate(files[i]):
         # print(f[7:-4])
         data = np.loadtxt(f, dtype='float')  # datファイルひとつ分
-        if data[0, 0] == 2:  # はじめの一点はなぜか不安定であると判定されてしまうのでこれを修正
-            data[0, 0] = 1
+        data[0, 0] = data[1, 0] # はじめの一点はなぜか不安定であると判定されてしまうのでこれを修正
         if j == 0:
             cat_data = data  # datファイル二つを同じグラフに結合したもの
         else:
