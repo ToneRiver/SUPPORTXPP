@@ -8,10 +8,9 @@
 from matplotlib import rcParams
 import matplotlib.pyplot as plt
 import numpy as np
-import cmath
-import math
 import sys
 import os
+import shutil
 out_path = "output"  # 出力フォルダ
 # delimiter = "/" #mac用フォルダ区切り文字
 delimiter = '\\'  # windows用フォルダ区切り文字
@@ -212,6 +211,7 @@ if file_name == "":
 # file_name += dt_now_format
 datas = []
 
+last_folder_name = duplicate_rename(out_path + delimiter + str(file_name))
 for i in range(len(files)):
     for j, f in enumerate(files[i]):
         # print(f[7:-4])
@@ -232,8 +232,6 @@ if draw_allVariables is True:
 else:
     variable_nums = [0,"period"]
 
-
-last_folder_name = duplicate_rename(out_path + delimiter + str(file_name))
 os.makedirs(last_folder_name, exist_ok=True)
 for variable_num in variable_nums:
     fig, ax = plt.subplots()
@@ -248,9 +246,6 @@ for variable_num in variable_nums:
         ax.set_xlim(xlim[0], xlim[1])
     if set_ylim and variable_num == 0:
         ax.set_ylim(ylim[0], ylim[1])
-
-    # if draw_allVariables is True:
-    #     eigenValues_tex = ''
 
     all_epoch = 0
     for i in range(len(datas)):
@@ -294,12 +289,6 @@ for variable_num in variable_nums:
         last_file_name = "variable"+str(variable_num)
     fig.savefig(last_folder_name+delimiter+last_file_name+".pdf")
 
-# if draw_allVariables is True:
-#     f = open(duplicate_rename(last_file_name+"_固有値.txt"), 'w')  # パラメータがメモされたtxtファイルを生成
-#     f.write(eigenValues_tex)
-#     f.close()
-# plt.show()
-
 for i in range(len(datas)):
     txt_num = i #結合したdatファイルの通し番号
     if len(datas) == 1:
@@ -307,5 +296,4 @@ for i in range(len(datas)):
     print(datas[i][0,0])
     np.savetxt(duplicate_rename(last_folder_name+delimiter+"data.txt"), datas[i], fmt='%.5f')
 
-# pc.copy(str(file_name)+".pdf")
 print("XPPtoPDF.py完了")
