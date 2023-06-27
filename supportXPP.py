@@ -14,10 +14,9 @@ dat_files_location = '.\\'  # 普段XPPのdatファイルを保存しておく�
 output_location = 'output'  # このアプリからジャンプできるグラフ出力場所を記入してください．
 python_code = 'python'  # pythonのプログラムを実行するときの先頭部分
 # python_code = 'python3'  # pythonのプログラムを実行するときの先頭部分
-apo = "" #windows
-# apo = "'" #mac
 ###############################################################
 
+apo = "" 
 
 class GuiWindow(QWidget):
 
@@ -131,9 +130,9 @@ class GuiWindow(QWidget):
         self.uis[-1].append([self.y_start, 60, 40])
         self.y_end = QLineEdit('5', self)
         self.uis[-1].append([self.y_end, 60, 40])
-        self.x_label = QLineEdit('$D$', self)
+        self.x_label = QLineEdit('\$D\$', self)
         self.uis[-1].append([self.x_label, 60, 40])
-        self.y_label = QLineEdit('$X_{1}$', self)
+        self.y_label = QLineEdit('\$X_{1}\$', self)
         self.uis[-1].append([self.y_label, 60, 40])
         # self.eigen_start = QLineEdit('0', self)
         # self.uis[-1].append([self.eigen_start, 60, 40])

@@ -65,7 +65,7 @@ def gen_graph(ax, data, colors, labels, n,variable_num):
     solution_kinds = ["\\textcolor{red}{安定平衡点}", "\\textbf{不安定平衡点}",
                       "\\textcolor{green}{安定周期解}", "\\textcolor{blue}{不安定周期解}"]
     for d_i, d in enumerate(data):
-        print(str(epoch) + " / " + str(all_epoch))
+        print(str(epoch))
         epoch += 1
         # if draw_allVariables is True and eigen_lim[0] <= float(d[3]) and float(d[3]) <= eigen_lim[1]:
         #     eigenValues_tex += f'{xlabel} $ = {d[3]}$のとき，{solution_kinds[int(d[0])-1]}であり，variable$ = $ '
@@ -99,20 +99,30 @@ def gen_graph(ax, data, colors, labels, n,variable_num):
         #             # else:
         #             #     eigenValues_tex += f'{re}'
         #         eigenValues_tex += '$\\\\ \n\n'
-        if (int(d[0]) == 1 and draw_solutions[0] == "True"):
-            stableE = np.append(stableE, [d[3], d[6+variable_num-1]])
-            pass
-        if (int(d[0]) == 2 and draw_solutions[1] == "True"):
-            unstableE = np.append(unstableE, [d[3], d[6+variable_num-1]])
-            pass
-        if (int(d[0]) == 3 and draw_solutions[2] == "True"):
-            stableP = np.append(stableP, [d[3], d[6+variable_num-1]])
-            stableP = np.append(stableP, [d[3], d[6+n+variable_num-1]])
-            pass
-        if (int(d[0]) == 4 and draw_solutions[3] == "True"):
-            unstableP = np.append(unstableP, [d[3], d[6+variable_num-1]])
-            unstableP = np.append(unstableP, [d[3], d[6+n+variable_num-1]])
-            pass
+        if variable_num != "period":
+            if (int(d[0]) == 1 and draw_solutions[0] == "True"):
+                stableE = np.append(stableE, [d[3], d[6+variable_num-1]])
+                pass
+            if (int(d[0]) == 2 and draw_solutions[1] == "True"):
+                unstableE = np.append(unstableE, [d[3], d[6+variable_num-1]])
+                pass
+            if (int(d[0]) == 3 and draw_solutions[2] == "True"):
+                stableP = np.append(stableP, [d[3], d[6+variable_num-1]])
+                stableP = np.append(stableP, [d[3], d[6+n+variable_num-1]])
+                pass
+            if (int(d[0]) == 4 and draw_solutions[3] == "True"):
+                unstableP = np.append(unstableP, [d[3], d[6+variable_num-1]])
+                unstableP = np.append(unstableP, [d[3], d[6+n+variable_num-1]])
+                pass
+        else:
+            if (int(d[0]) == 3):
+                stableP = np.append(stableP, [d[3], d[5]])
+                stableP = np.append(stableP, [d[3], d[5]])
+                pass
+            if (int(d[0]) == 4):
+                unstableP = np.append(unstableP, [d[3], d[5]])
+                unstableP = np.append(unstableP, [d[3], d[5]])
+                pass
 
     if labels != False:
         if len(unstableE) != 0:
@@ -218,20 +228,22 @@ for i in range(len(files)):
 
 n = int((len(datas[0][0])-6)/4)  # モデルの次元
 if draw_allVariables is True:
-    variable_nums = range(0, n+1)
+    variable_nums = list(range(0, n+1))
+    variable_nums.append("period")
 else:
-    variable_nums = [0]
+    variable_nums = [0,"period"]
 
 
 last_folder_name = duplicate_rename(out_path + delimiter + str(file_name))
 os.makedirs(last_folder_name, exist_ok=True)
 for variable_num in variable_nums:
     fig, ax = plt.subplots()
+    ax.set_xlabel(xlabel, size=20)
     if variable_num == 0:
-        ax.set_xlabel(xlabel, size=20)
         ax.set_ylabel(ylabel, size=20)
+    elif variable_num == "period":
+        ax.set_ylabel("period", size=20)
     else:
-        ax.set_xlabel("abscissa", size=20)
         ax.set_ylabel("ordinate", size=20)
     if set_xlim and variable_num == 0:
         ax.set_xlim(xlim[0], xlim[1])
@@ -277,6 +289,8 @@ for variable_num in variable_nums:
 
     if variable_num == 0:
         last_file_name = "0_main"
+    elif variable_num == "period":
+        last_file_name = "1_period"
     else:
         last_file_name = "variable"+str(variable_num)
     fig.savefig(last_folder_name+delimiter+last_file_name+".pdf")
